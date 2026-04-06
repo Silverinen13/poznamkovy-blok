@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+import { signIn } from "next-auth/react";
 
 export default function Login(){
     const [username, setUsername] = useState('');
@@ -9,25 +10,19 @@ export default function Login(){
     const login = async (e: React.FormEvent) => {
         e.preventDefault()
 
-        const Login = await fetch('/api/login', {
-            method: 'POST',
-            headers: { 
-                'Content-Type': 'application/json' 
-            },
-            body: JSON.stringify(
-                {   username, 
-                    password 
-                }),
-        });
+        const result = await signIn("credentials", {
+            username,
+            password, 
+            redirect: false,
+        }
+    )
 
-        const data = await Login.json();
-
-        if(Login.ok) {
-            alert (data.message)
+        if(result?.ok) {
+            alert ("Přihlášení bylo úspěšné!")
             router.push('/notes');
         }
         else {
-            alert(data.message || "Přihlášení se nepovedlo!")
+            alert("Špatné jméno nebo heslo!")
         }
 
         setUsername('')
