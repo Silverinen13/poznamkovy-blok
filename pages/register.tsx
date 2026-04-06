@@ -20,11 +20,14 @@ export default function Register(){
                 }),
         });
 
+        const data = await registration.json();
+
         if(registration.ok) {
+            alert (data.message)
             router.push('/login');
         }
         else {
-            alert ('Registrace se nepovedla!')
+            alert(data.message || "Registrace se nepovedla")
         }
 
         setUsername('')

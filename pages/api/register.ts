@@ -29,5 +29,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         },
     });
 
-    return res.status(201).json({ message: "Registrace proběhla v pořádku.", id: user.id });
+    return res.status(201).json({ message: "Registrace proběhla v pořádku."});
 }

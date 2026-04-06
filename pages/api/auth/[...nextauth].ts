@@ -9,7 +9,7 @@ export const authOptions = {
         name: "Credentials",
 
         credentials: {
-            username: {label: "Uživatelksé jméno", type: "text"},
+            username: {label: "Uživatelské jméno", type: "text"},
             password: {label: "Heslo", type: "password"}
         },
 
