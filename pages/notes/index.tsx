@@ -1,23 +1,24 @@
 import  { useEffect, useState } from "react"
-import type { FormEvent } from "react"
 import { useSession, signOut } from "next-auth/react"
 import { useRouter } from "next/router"
+import Link from 'next/link'
 
 export default function Home() {
     const { data: session, status }: any = useSession()
     const router = useRouter()
     const userId = session?.user?.id;
+    const [notes, setNotes] = useState<any[]>([])
+    const [title, setTitle] = useState('')
     useEffect(() => {
         if (status === "unauthenticated") {
             router.push("/login")
         }
     }, [status, router])
 
-    if (status === "loading") return <p>Načítání...</p>
-    const [notes, setNotes] = useState<any[]>([])
-    const [title, setTitle] = useState('')
+
+   
     const fetchNotes = async () => {
-        if (!userId) return alert("Počkej vteřinu, než se načte přihlášení..."); // TADY!;
+
         const res = await fetch('/api/notes', {
             headers: {
                 "user-id": String(userId) 
@@ -32,11 +33,10 @@ export default function Home() {
         }
     }, [userId])
   
+
+
   const AddNote = async (e: React.FormEvent) => {
     e.preventDefault()
-
-    //pak odstranit
-    console.log("Odesílám poznámku pro userId:", userId);
 
     if (!title.trim()) return
 
@@ -51,15 +51,13 @@ export default function Home() {
           title,
         })
     })
-
-    if (!res.ok) {
-    const errorData = await res.json();
-    console.error("Chyba z API (status " + res.status + "):", errorData.message);
-  } else {
+    
     setTitle("");
     fetchNotes();
+  
   }
-  }
+
+  if (status === "loading") return <p>Načítání...</p>
 
 return (
     <main>
@@ -78,9 +76,11 @@ return (
       <ul>
         {notes?.map(note =>(
           <li key={note.id}>
-            <span>
-              {note.title}
-            </span>
+            <Link href={`/notes/${note.id}`}>
+              <span>
+                {note.title}
+              </span>
+            </Link>
           </li>
         ))}
         </ul>
