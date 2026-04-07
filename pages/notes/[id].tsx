@@ -1,6 +1,9 @@
 import  { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import { useSession } from "next-auth/react";
+import dynamic from "next/dynamic"
+
+const Editor = dynamic(() => import("../../components/editor"), { ssr: false });
 
 export default function Home() {
     const { data: session, status }: any = useSession()
@@ -8,7 +11,7 @@ export default function Home() {
     const userId = session?.user?.id;
     const { id } = router.query;
 
-    const [notes, setNote] = useState<any>([])
+    const [note, setNote] = useState<any>([])
     const [title, setTitle] = useState('')
     const [content, setContent] = useState('')
     const [saving, setSaving] = useState(false)
@@ -64,13 +67,12 @@ return (
         <button onClick={saveNote} disabled={saving}>
           {saving ? "Ukládám..." : "Uložit změny"}
         </button>
-      <h1>{notes.title}</h1>
-      <h4>Vaše poznámky</h4>
+        <h1>{note.title}</h1>
 
-      <textarea
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-      />
+        <Editor
+            initialContent={note.content}
+            onChange={(newContent) => setContent(newContent)}
+        />
     </main>
   );
 }
