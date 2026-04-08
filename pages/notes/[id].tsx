@@ -1,9 +1,20 @@
 import  { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import { useSession } from "next-auth/react";
-import dynamic from "next/dynamic"
+import {
+  Menubar,
+  MenubarContent,
+  MenubarGroup,
+  MenubarItem,
+  MenubarMenu,
+  MenubarSeparator,
+  MenubarShortcut,
+  MenubarTrigger,
+} from "@/components/ui/menubar"
+import { Button } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
+import Link from 'next/link'
 
-const Editor = dynamic(() => import("../../components/editor"), { ssr: false });
 
 export default function Home() {
     const { data: session, status }: any = useSession()
@@ -36,22 +47,7 @@ export default function Home() {
         setContent(data.content)
     }
 
-    const saveNote = async () => {
-        setSaving(true)
-        const res = await fetch(`/api/notes/${id}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                "user-id": String(userId)
-            },
-            body: JSON.stringify({ content })
-        });
-
-        if (res.ok) {
-            alert("Uloženo!");
-        }
-            setSaving(false);
-    };
+    
 
     useEffect (() => {
         if (userId){
@@ -59,20 +55,30 @@ export default function Home() {
         }
     }, [userId])
   
-    if (status === "loading" || !note.content) return <p>Načítání...</p>
+    if (status === "loading") return <p>Načítání...</p>
 
 return (
-    <main>
-        <button onClick={() => router.push("/notes")}>← Zpět</button>
-        <button onClick={saveNote} disabled={saving}>
-          {saving ? "Ukládám..." : "Uložit změny"}
-        </button>
-        <h1>{note.title}</h1>
+    <div className="flex flex-col gap-4 items-center w-full pt-[50px] min-h-screen">
+        <Menubar className="w-full justify-between px-2 w-100">
+            <div className="flex items-center gap-2">
+                <Label>{note.title}</Label>
+            </div>
+            <Button onClick={() => router.push("/notes")}>← Zpět</Button>
+            <MenubarMenu>
+                <MenubarTrigger>Soubor</MenubarTrigger>
+                <MenubarContent>
+                    <MenubarGroup>
+                        <Button><Link href={`/notes/${note.id}/edit`}>Editovat</Link></Button>
+                        <Button><Link href={`/notes/${note.id}`}>Smazat</Link></Button>
+                    </MenubarGroup>
+                </MenubarContent>
+            </MenubarMenu>
+        </Menubar>
 
-        <Editor
-            initialContent={note.content}
-            onChange={(newContent) => setContent(newContent)}
-        />
-    </main>
+        <button onClick={() => router.push("/notes")}>← Zpět</button>
+        <h1>{note.title}</h1>
+        <label>{note.createdAt}</label>
+        <label>{note.updatedAt}</label>
+    </div>
   );
 }

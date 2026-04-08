@@ -26,18 +26,7 @@ export default async function noteById(req: NextApiRequest, res: NextApiResponse
     }
 
     if (req.method === "PUT") {
-    const { content } = req.body;
-
-    const updatedNote = await prisma.note.update({
-        where: { id: Number(id) },
-        data: { content: content }
-    });
-
-    if(updatedNote.userId !== userId){
-            return res.status(403).json({ message: "Nemáte přístup k této poznámce!" });
-        }
-
-    return res.status(200).json(updatedNote);
+        return res.status(405).json({ message: "Povolen je pouze POST!" });
 }
     
 }

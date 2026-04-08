@@ -107,13 +107,13 @@ return (
       </form>
     </Card>
     <h4>Vaše poznámky</h4>
-    <ul className="w-100">
+    <ul className="w-100 flex flex-col gap-3">
       {notes?.map(note =>(
         <li key={note.id} className="flex items-center justify-between p-2 border border-white rounded-lg">
           <Label>{note.title}</Label>
           <div className="flex items-center gap-1">
             <Button><Link href={`/notes/${note.id}`}>Zobrazit</Link></Button>
-            <Button><Link href={`/notes/${note.id}`}>Editova</Link></Button>
+            <Button><Link href={`/notes/${note.id}/edit`}>Editovat</Link></Button>
             <Button><Link href={`/notes/${note.id}`}>Smazat</Link></Button>
           </div>
         </li>
