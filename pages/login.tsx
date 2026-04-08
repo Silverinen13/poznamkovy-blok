@@ -1,6 +1,19 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { signIn } from "next-auth/react";
+import Link from 'next/link'
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 export default function Login(){
     const [username, setUsername] = useState('');
@@ -29,26 +42,48 @@ export default function Login(){
         setPassword('')
     }
 
-
 return (
-    <div>
-        <h1>Přihlášení</h1>
-        <form onSubmit={login}>
-            <input
-                type='text'
-                placeholder='Uživatelské jméno'
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-            />
-            <br />
-            <input
-                type='password'
-                placeholder='Heslo'
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-            />
-            <br />
-            <button type='submit'>Přihlásit se</button>
-        </form>
+    <div className="flex min-h-screen w-full items-center justify-center bg-background p-6 md:p-10">
+        <Card className='w-full max-w-sm'>
+            <CardHeader>
+                <CardTitle>Přihlaste se ke svému účtu</CardTitle>
+                <CardDescription>Zadejte uživatelské jméno a heslo</CardDescription>
+                <CardAction>
+                    <Button variant="link" asChild>
+                        <Link href="register">Registrace</Link>
+                    </Button>
+                </CardAction>
+            </CardHeader>
+            <form onSubmit={login}>
+                <CardContent>
+                    <div className='flex flex-col gap-6'>
+                        <div className='grid gap-2'>
+                            <Label htmlFor="username">Uživatelské jméno</Label>
+                            <Input
+                                type='text'
+                                placeholder='Uživatelské jméno'
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                            />
+                        </div>
+                        <div className='grid gap-2'>
+                            <Label htmlFor="password">Heslo</Label>
+                            <Input
+                                type='password'
+                                placeholder='Heslo'
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
+                        </div>
+                    </div>
+                
+                </CardContent>
+                <br></br>
+                <CardFooter className='flex-col gap-2'>
+                    <Button type='submit'>Přihlásit se</Button>
+                </CardFooter>
+            </form>
+        </Card>
     </div>
+    
 )}
