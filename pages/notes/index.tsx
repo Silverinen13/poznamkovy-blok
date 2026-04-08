@@ -2,6 +2,20 @@ import  { useEffect, useState } from "react"
 import { useSession, signOut } from "next-auth/react"
 import { useRouter } from "next/router"
 import Link from 'next/link'
+import {
+  Menubar,
+} from "@/components/ui/menubar"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 export default function Home() {
     const { data: session, status }: any = useSession()
@@ -60,32 +74,51 @@ export default function Home() {
   if (status === "loading") return <p>Načítání...</p>
 
 return (
-    <main>
-      <h1>Poznámkový blok</h1>
-      <h4>Vaše poznámky</h4>
 
+  <div className="flex flex-col gap-4 items-center w-full pt-[50px] min-h-screen">
+    <Menubar className="w-full justify-between px-2 w-100">
+      <div className="flex items-center gap-2">
+        <Label>Poznámkový blok</Label>
+      </div>
+        <Button onClick={() => signOut({ callbackUrl: '/login' })} > Odhlásit se </Button>
+    </Menubar>
+    <Card className='w-full max-w-sm'>
+      <CardHeader>
+        <CardTitle>Zde můžete vytvořit novou poznámku</CardTitle>
+        <CardDescription>Zadejte název nové poznámky</CardDescription>
+      </CardHeader>
       <form onSubmit={AddNote}>
-        <input
-          placeholder="Název poznámky"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          />
-          <button type="submit">Přidat poznámku</button>
+        <CardContent>
+          <div className='flex flex-col gap-6'>
+            <div className='grid gap-2'>
+              <Label htmlFor="username">Název</Label>
+                <Input
+                  placeholder="Název poznámky"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+            />
+          </div>
+        </div>
+        </CardContent>
+        <br></br>
+        <CardFooter className='flex-col gap-2'>
+          <Button type="submit">Přidat poznámku</Button>
+        </CardFooter>
       </form>
-
-      <ul>
-        {notes?.map(note =>(
-          <li key={note.id}>
-            <Link href={`/notes/${note.id}`}>
-              <span>
-                {note.title}
-              </span>
-            </Link>
-          </li>
-        ))}
-        </ul>
-        <hr></hr>
-        <button onClick={() => signOut({ callbackUrl: '/login' })} > Odhlásit se </button>
-    </main>
+    </Card>
+    <h4>Vaše poznámky</h4>
+    <ul className="w-100">
+      {notes?.map(note =>(
+        <li key={note.id} className="flex items-center justify-between p-2 border border-white rounded-lg">
+          <Label>{note.title}</Label>
+          <div className="flex items-center gap-1">
+            <Button><Link href={`/notes/${note.id}`}>Zobrazit</Link></Button>
+            <Button><Link href={`/notes/${note.id}`}>Editova</Link></Button>
+            <Button><Link href={`/notes/${note.id}`}>Smazat</Link></Button>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
   );
 }

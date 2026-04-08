@@ -59,7 +59,7 @@ export default function Home() {
         }
     }, [userId])
   
-    if (status === "loading") return <p>Načítání...</p>
+    if (status === "loading" || !note.content) return <p>Načítání...</p>
 
 return (
     <main>
