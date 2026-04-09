@@ -30,7 +30,7 @@ export default function Editor({ initialContent, onChange }: EditorProps) {
   });
 
   return (
-    <div className="min-h-[300px] border rounded-md p-2">
+    <div className="min-h-full">
       <BlockNoteView
         editor={editor}
         onChange={() => {

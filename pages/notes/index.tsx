@@ -114,7 +114,6 @@ return (
           <div className="flex items-center gap-1">
             <Button><Link href={`/notes/${note.id}`}>Zobrazit</Link></Button>
             <Button><Link href={`/notes/${note.id}/edit`}>Editovat</Link></Button>
-            <Button><Link href={`/notes/${note.id}`}>Smazat</Link></Button>
           </div>
         </li>
       ))}
