@@ -35,9 +35,24 @@ export default async function noteById(req: NextApiRequest, res: NextApiResponse
 
     if(updatedNote.userId !== userId){
             return res.status(403).json({ message: "Nemáte přístup k této poznámce!" });
-        }
+    }
+
 
     return res.status(200).json(updatedNote);
-}
+    }
+
+    if (req.method === "DELETE") {
+
+    const deleteNote = await prisma.note.delete({
+        where: { id: Number(id) }
+    })
+
+    if(deleteNote.userId !== userId){
+            return res.status(403).json({ message: "Nemáte přístup k této poznámce!" });
+    }
+
+    return res.status(204).end()
+  }
+
     
 }

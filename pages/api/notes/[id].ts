@@ -25,8 +25,8 @@ export default async function noteById(req: NextApiRequest, res: NextApiResponse
         return res.status(200).json(note)
     }
 
-    if (req.method === "PUT") {
-        return res.status(405).json({ message: "Povolen je pouze POST!" });
+    if (req.method === "PUT" || req.method === "POST") {
+        return res.status(405).json({ message: "Povolen je pouze GET!" });
 }
     
 }
