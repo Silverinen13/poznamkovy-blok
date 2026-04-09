@@ -16,6 +16,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { exportNotes } from "@/pages/api/notes/export"
 
 export default function Home() {
     const { data: session, status }: any = useSession()
@@ -71,7 +72,21 @@ export default function Home() {
   
   }
 
-  if (status === "loading") return <p>Načítání...</p>
+  const notesExport = (exportNote?: any) => {
+
+    if (exportNote){
+      exportNotes(exportNote)
+      return
+    }
+
+    if (notes.length === 0) {
+      alert("Nejsou vytvořeny žádné poznámky!")
+      return
+    }
+    exportNotes(notes)
+  }
+
+   if (status === "loading") return <p>Načítání...</p>
 
 return (
 
@@ -80,7 +95,10 @@ return (
       <div className="flex items-center gap-2">
         <Label>Poznámkový blok</Label>
       </div>
+      <div>
+        <Button onClick={() => notesExport()}>Exportovat</Button>
         <Button onClick={() => signOut({ callbackUrl: '/login' })} > Odhlásit se </Button>
+      </div>
     </Menubar>
     <Card className='w-full max-w-sm'>
       <CardHeader>
@@ -114,6 +132,7 @@ return (
           <div className="flex items-center gap-1">
             <Button><Link href={`/notes/${note.id}`}>Zobrazit</Link></Button>
             <Button><Link href={`/notes/${note.id}/edit`}>Editovat</Link></Button>
+            <Button onClick={() => notesExport(note)}>Exportovat</Button>
           </div>
         </li>
       ))}
