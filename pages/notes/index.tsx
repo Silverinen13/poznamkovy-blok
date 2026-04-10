@@ -86,6 +86,29 @@ export default function Home() {
     exportNotes(notes)
   }
 
+  const importNotes = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    const reader = new FileReader()
+    reader.onload = async (event) => {
+      const text = event.target?.result as string
+      const json = JSON.parse(text)
+      const data = Array.isArray(json) ? json : [json]
+      await fetch  ('/api/notes/import', {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json",
+          "user-id": String(userId)
+        },
+        body: JSON.stringify(data),
+      })
+      fetchNotes()
+      e.target.value=""
+    }
+    reader.readAsText(file)
+  }
+
    if (status === "loading") return <p>Načítání...</p>
 
 return (
@@ -97,6 +120,14 @@ return (
       </div>
       <div>
         <Button onClick={() => notesExport()}>Exportovat</Button>
+        <input 
+          type="file" 
+          id="import-upload"
+          accept=".json" 
+          onChange={importNotes} 
+          className="hidden"
+        />
+        <Button onClick={() => document.getElementById('import-upload')?.click()}>Importovat</Button>
         <Button onClick={() => signOut({ callbackUrl: '/login' })} > Odhlásit se </Button>
       </div>
     </Menubar>
