@@ -1,40 +1,109 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+# Aplikace poznámkového bloku
 
-## Getting Started
+Webová aplikace pro správu osobních poznámek s autentizací uživatele, kde každý uživatel pracuje pouze se svými daty.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Požadavky a instalace
+
+### Instalace
+
+1. Nejprve musíme stáhnou projekt z GitLabu
+``` bash
+git clone https://git.uzlabina.cz/stribja/poznamkovy-blok
+```
+2. Vstoupíme do složky projektu
+``` bash
+cd poznamkovy-blok
+```
+3. Pokud pracuejem na OS Windows, přepneme se do Linux subsystému
+ ``` bash
+ wsl
+```
+4. Nainstalujeme **node_modules**
+``` bash
+npm install
+```
+5. Nainstalujeme prismu
+``` bash
+npm install prisma@6.3.0 @prisma/client@6.3.0 
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Nastavení desktop dockeru
+- Pro běh databáze budeme používat aplikaci desktop docker
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+1. Zapneme databázi v aplikaci desktop docker
+``` bash
+    docker run --name noteapps -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=password123 -e POSTGRES_DB=notesapp -p 5432:5432 -d postgres:latest
+```
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+### Inicializace prismy
+1. Vygenerujeme prismu
+``` bash
+npx prisma generate
+```
+2. Imigrujeme prismu lokálně
+``` bash
+npx prisma migrate dev
+```
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
+### Nastavení .env souboru
 
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Pro setup .env souboru použijeme připravený skrip který spustíme následujícím příkazem
+``` bash
+npm run env:copy
+```
 
-## Learn More
+### Seeding script
 
-To learn more about Next.js, take a look at the following resources:
+- Pro vyzkoušení funkčnosti aplikace je zřízenn uživatelský demo účet. 
+- Uživatelské jméno uživatele: demo
+- Heslo uživatele: demo1234
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
+- Pro vytvoření uživatele použijeme následující seeding script bez nutnosti registrace přes webovou aplikaci:
+``` bash
+npx tsx prisma/seed.ts
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Zapnutí aplikace
+- Abychom zapli aplikaci, zadáme následující příkaz:
+``` bash
+npm run dev
+```
 
-## Deploy on Vercel
+- Pokud by byl problém se zapnutím aplikace, kvůli seklé cache, použijemé následující příkaz, který cache smaže a následně opět vytvoří
+``` bash
+rm -rf .next && npm run dev
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Aplikace se otevře na adrese http://localhost:3000
+- Pro přístup na stránku pro přihlášení použijeme následující cestu http://localhost:3000/login
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+## Import a Export
+
+### Import
+- Import se nachází v následující cestě -> /pages/api/notes/import
+
+Import lze vyzkoušet po přihlášení do aplikace na stránce http://localhost:3000/notes. V menu stačí kliknout na tlačítko importovat a vybrat soubor jsou v následujícím formátu:
+
+``` json
+[
+  {
+    "title": "První poznámka",
+    "content": "Obsah první poznámky",
+    "createdAt": "2026-03-01T10:15:00.000Z",
+    "updatedAt": "2026-03-10T09:00:00.000Z",
+  },
+
+  {
+    "title": "Druhá poznámka",
+    "content": "Obsah druhé poznámky",
+  },
+]
+```
+
+### Export
+
+- Import se nachází v následující cestě -> /pages/api/notes/export
+
+Import lze vyzkoušet po přihlášení do aplikace na stránce http://localhost:3000/notes. V menu stačí kliknout na tlačítko exportovat, čímž se exportují všechyn poznámky uživatele, nebo můžeme exportovat jednotlivé poznámky kliknutím na tlačítko v řádku seznamu poznámek.
