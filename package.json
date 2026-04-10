@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "seed": "tsx prisma/seed.ts"
+    "seed": "tsx prisma/seed.ts",
+    "env:copy": "cp .env.example .env"
   },
   "dependencies": {
     "@blocknote/core": "^0.47.3",

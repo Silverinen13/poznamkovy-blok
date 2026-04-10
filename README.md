@@ -36,17 +36,6 @@ npm install prisma@6.3.0 @prisma/client@6.3.0
 ``` bash
     docker run --name noteapps -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=password123 -e POSTGRES_DB=notesapp -p 5432:5432 -d postgres:latest
 ```
-
-### Inicializace prismy
-1. Vygenerujeme prismu
-``` bash
-npx prisma generate
-```
-2. Imigrujeme prismu lokálně
-``` bash
-npx prisma migrate dev
-```
-
 ### Nastavení .env souboru
 
 - Pro setup .env souboru použijeme připravený skrip který spustíme následujícím příkazem
@@ -68,6 +57,18 @@ a vygenerovaná string vložíme na řádek místo textu
 ``` bash
 "vaše-tajné-heslo"
 ```
+
+### Inicializace prismy
+1. Vygenerujeme prismu
+``` bash
+npx prisma generate
+```
+2. Imigrujeme prismu lokálně
+``` bash
+npx prisma migrate dev
+```
+
+
 
 ### Seeding script
 
