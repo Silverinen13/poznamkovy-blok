@@ -54,6 +54,21 @@ npx prisma migrate dev
 npm run env:copy
 ```
 
+- Řádek 
+``` bash
+NEXTAUTH_SECRET="vaše-tajné heslo"
+```
+
+změníme na nějaké náhodné heslo, které si můžeme nechat vygenerovat příkazem
+``` bash
+openssl rand -base64 32
+```
+
+a vygenerovaná string vložíme na řádek místo textu 
+``` bash
+"vaše-tajné-heslo"
+```
+
 ### Seeding script
 
 - Pro vyzkoušení funkčnosti aplikace je zřízenn uživatelský demo účet. 
