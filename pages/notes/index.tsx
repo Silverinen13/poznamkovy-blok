@@ -16,7 +16,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { exportNotes } from "@/pages/notes/export"
+import { exportNotes } from "@/lib/export"
 
 export default function Home() {
     const { data: session, status }: any = useSession()
